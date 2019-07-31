@@ -1,0 +1,9 @@
+{ decls }
+namespace CP {  }
+
+[ libMuonSelectorTools_Reflex.so ]
+# List of selected classes
+class CP::IMuonSelectionTool
+class CP::MuonSelectionTool
+header MuonSelectorTools/IMuonSelectionTool.h
+header MuonSelectorTools/MuonSelectionTool.h

@@ -1,0 +1,199 @@
+#include <EventLoop/Job.h>
+#include <EventLoop/StatusCode.h>
+#include <EventLoop/Worker.h>
+#include "EventLoop/OutputStream.h"
+#include <AsgTools/MsgStream.h>
+#include <AsgTools/MsgStreamMacros.h>
+#include "xAODCore/AuxInfoBase.h"
+#include "xAODCore/ShallowAuxInfo.h"
+#include "xAODCore/ShallowCopy.h"
+#include <FourMuonAnalysis/XFourMuonAnalysis.h>
+#include <FourMuonAnalysis/Utils.h>
+
+EL::StatusCode XFourMuonAnalysis :: doB1OniaSel () {
+
+  // B1Onia selection
+  //---------------------------------
+  m_good_b1onias.clear();
+
+  xAOD::VertexContainer::const_iterator pairItr = m_b1onias->begin();
+  for (; pairItr!=m_b1onias->end(); ++pairItr) {
+    auto pair = *pairItr;
+
+    if ((*pairItr)->auxdataConst<MuonLinkVector>("MuonLinks").size()!=2) {
+      ATH_MSG_ERROR("doB1OniaSel() Pair without 2 muon links! Something is wrong!");
+      return StatusCode::FAILURE;
+    }
+
+    //if(pair->auxdataConst<std::string>("ChargeCode") == "+-" || pair->auxdataConst<std::string>("ChargeCode") == "-+") 
+    HM->ClearCutflowFlag("B1Onia");
+    HM->Cutflow_flag_tmp["B1Onia"]["AllB1Onia"]=1;
+    if(pair->auxdataConst<float>("chiSquared") < 200) {
+    //if(pair->auxdataConst<float>("chiSquared") < 3.) {
+      HM->Cutflow_flag_tmp["B1Onia"]["Chi2"]=1;
+      if(pair->auxdataConst<float>("Jpis_mass") > 2e3 && pair->auxdataConst<float>("Jpsi_mass") < 50e3) {
+        HM->Cutflow_flag_tmp["B1Onia"]["Mass"]=1;
+        if( passPairTrkPt(pair, 3.0e3) ) {
+          HM->Cutflow_flag_tmp["B1Onia"]["B1OniaTrkKine"]=1;
+          m_good_b1onias.push_back(pair);
+        }
+      }
+    }
+   
+    HM->FillCutflow("B1Onia");
+  }
+
+  if(m_msgLevel==MSG::DEBUG) ATH_MSG_INFO("doB1OniaSel() Number of good b1onias = " << m_good_b1onias.size() );
+  HM->Var["nPairsOS"]=m_good_b1onias.size();
+
+  int nGoodPair=0;
+  //== make some plots
+  for(auto pair: m_good_b1onias) {
+    HM->ClearCutflowFlag("B1Onia");
+    bool pass_pt=false, pass_cb=false, pass_chi2=false, pass_mass=false;
+
+    double mass = pair->auxdataConst<float>("Jpsi_mass");
+    double massErr = pair->auxdataConst<float>("Jpsi_massErr");
+    double chi2 = pair->auxdataConst<float>("chiSquared");
+
+    if( passPairTrkPt(pair, 4e3) ) pass_pt=true;
+    if( chi2 < 1 ) pass_chi2=true;
+    if( mass>9.2e3 && mass<9.7e3) pass_mass=true;
+
+    //==== muon kinematics
+    const MuonLinkVector MuonLinks = pair->auxdataConst<MuonLinkVector>("MuonLinks");
+    const MuonLink& MuonLink0 = MuonLinks[0];
+    const MuonLink& MuonLink1 = MuonLinks[1];
+
+    //std::cout << MuonLink0.isValid() << " " << MuonLink1.isValid() << std::endl;
+
+    const xAOD::Muon * Muon0 = NULL;
+    const xAOD::Muon * Muon1 = NULL;
+    if(MuonLink0.isValid()) Muon0 = *MuonLink0;
+    if(MuonLink1.isValid()) Muon1 = *MuonLink1;
+    // std::cout << Muon0 << " " << Muon1 << std::endl;
+    if(Muon0 == NULL || Muon1 == NULL) {
+      HM->FillCutflow("B1Onia");
+      continue;
+    }
+    HM->Cutflow_flag_tmp["B1Onia"]["MuonMatching"]=1;
+    HM->Cutflow_flag["B1Onia"]["MuonMatching"]=1;
+
+    const xAOD::TrackParticle * Track0 = NULL;
+    const xAOD::TrackParticle * Track1 = NULL;
+
+    //==== tracks
+    const TrkLink& Link0 = Muon0->inDetTrackParticleLink();
+    const TrkLink& Link1 = Muon1->inDetTrackParticleLink();
+
+    if(Link0.isValid()) Track0 = *Link0;
+    if(Link1.isValid()) Track1 = *Link1;
+
+    if(Track0 == NULL || Track1 == NULL) {
+      Warning("XFourMuonAnalysis::doB1OniaSel()", "Missing Track Pointers!");
+      HM->FillCutflow("B1Onia");
+      continue;
+    }
+    HM->Cutflow_flag_tmp["B1Onia"]["TrkMatching"]=1;
+
+    //==== ID hits cut
+    bool passedIDCuts = true;
+    passedIDCuts &= m_muonSelectionToolLoose->passedIDCuts(*Muon0);//ID Cuts should be already included in next cut
+    passedIDCuts &= m_muonSelectionToolLoose->passedIDCuts(*Muon1);
+    if(passedIDCuts) HM->Cutflow_flag_tmp["B1Onia"]["B1OniaID"]=1;
+    else {
+      HM->FillCutflow("B1Onia");
+      continue;
+    }
+
+    int nLoose=0, nMedium=0, nTight=0;
+    if(m_muonSelectionToolLoose->accept(*Muon0)) nLoose+=1;
+    if(m_muonSelectionToolMedium->accept(*Muon0)) nMedium+=1;
+    if(m_muonSelectionToolTight->accept(*Muon0)) nTight+=1;
+
+    if(m_muonSelectionToolLoose->accept(*Muon1)) nLoose+=1;
+    if(m_muonSelectionToolMedium->accept(*Muon1)) nMedium+=1;
+    if(m_muonSelectionToolTight->accept(*Muon1)) nTight+=1;
+
+    HM->VVar["B1Onia_nLoose"]->push_back(nLoose);
+    HM->VVar["B1Onia_nMedium"]->push_back(nMedium);
+    HM->VVar["B1Onia_nTight"]->push_back(nTight);
+
+    int nCb=0;
+    if(Muon0->muonType() == xAOD::Muon::Combined) nCb ++;
+    if(Muon1->muonType() == xAOD::Muon::Combined) nCb ++;
+    if(nCb==2) pass_cb=true;
+    HM->VVar["B1Onia_nCB"]->push_back(nCb);
+    // match with the four good muons
+    if(matchFourMuon(pair, m_good_qmus)) {
+      HM->VVar["MatchQMu_B1Onia"]->push_back(1);
+      if(chi2 < 3) nGoodPair += 1;
+    }
+    else HM->VVar["MatchQMu_B1Onia"]->push_back(0);
+
+    // kinematics
+    HM->VVar["MassO_B1Onia"]->push_back(mass*1e-3);
+    HM->VVar["MassErrO_B1Onia"]->push_back(massErr*1e-3);
+    HM->VVar["Chi2O_B1Onia"]->push_back(log10(chi2));
+
+    // muons
+    TLorentzVector MuDiMuon1 = Muon0->p4() + Muon1->p4();
+    HM->VVar["MuMO_B1Onia"]->push_back(MuDiMuon1.M()*1e-3);
+    HM->VVar["MuPtO_B1Onia"]->push_back(MuDiMuon1.Pt()*1e-3);
+    HM->VVar["MuPhiO_B1Onia"]->push_back(MuDiMuon1.Phi());
+    HM->VVar["MuYO_B1Onia"]->push_back(MuDiMuon1.Rapidity());
+
+    HM->VVar["L1IsCB_B1Onia"]->push_back(Muon0->muonType()==0);
+    HM->VVar["L1Pt_B1Onia"]->push_back(Muon0->pt()*1e-3);
+    HM->VVar["L1Eta_B1Onia"]->push_back(Muon0->eta());
+    HM->VVar["L1Phi_B1Onia"]->push_back(Muon0->phi());
+
+    HM->VVar["L2IsCB_B1Onia"]->push_back(Muon1->muonType()==0);
+    HM->VVar["L2Pt_B1Onia"]->push_back(Muon1->pt()*1e-3);
+    HM->VVar["L2Eta_B1Onia"]->push_back(Muon1->eta());
+    HM->VVar["L2Phi_B1Onia"]->push_back(Muon1->phi());
+
+    // tracks
+    TLorentzVector TrkDiMuon1 = Track0->p4() + Track1->p4();
+    HM->VVar["TrkMO_B1Onia"]->push_back(TrkDiMuon1.M()*1e-3);
+    HM->VVar["TrkPtO_B1Onia"]->push_back(TrkDiMuon1.Pt()*1e-3);
+    HM->VVar["TrkPhiO_B1Onia"]->push_back(TrkDiMuon1.Phi());
+    HM->VVar["TrkYO_B1Onia"]->push_back(TrkDiMuon1.Rapidity());
+
+    HM->VVar["L1TrkPt_B1Onia"]->push_back(Track0->pt()*1e-3);
+    HM->VVar["L1TrkEta_B1Onia"]->push_back(Track0->eta());
+    HM->VVar["L1TrkPhi_B1Onia"]->push_back(Track0->phi());
+
+    HM->VVar["L2TrkPt_B1Onia"]->push_back(Track1->pt()*1e-3);
+    HM->VVar["L2TrkEta_B1Onia"]->push_back(Track1->eta());
+    HM->VVar["L2TrkPhi_B1Onia"]->push_back(Track1->phi());
+
+    // Helper Tool
+    xAOD::BPhysHelper bVtx(pair);
+    TLorentzVector Muon0_RefTrack = bVtx.refTrk(0, M_MU);
+    TLorentzVector Muon1_RefTrack = bVtx.refTrk(1, M_MU);
+    // vertex fit kine
+    HM->VVar["B1Oa0"]->push_back(bVtx.a0());
+    HM->VVar["B1Oa0Err"]->push_back(bVtx.a0Err());
+    HM->VVar["B1Oz0"]->push_back(bVtx.z0());
+    HM->VVar["B1Oz0Err"]->push_back(bVtx.z0Err());
+    HM->VVar["B1Oa0xy"]->push_back(bVtx.a0xy());
+    HM->VVar["B1Oa0xyErr"]->push_back(bVtx.a0xyErr());
+    HM->VVar["B1Olxy"]->push_back(bVtx.lxy());
+    HM->VVar["B1OlxyErr"]->push_back(bVtx.lxyErr());
+
+    TLorentzVector RefDiMuon = Muon0_RefTrack + Muon1_RefTrack;
+
+    HM->VVar["MassORefTrk_B1Onia"]->push_back(RefDiMuon.M()*1e-3);
+    HM->VVar["PtORefTrk_B1Onia"]->push_back(RefDiMuon.Pt()*1e-3);
+    HM->VVar["YORefTrk_B1Onia"]->push_back(RefDiMuon.Rapidity());
+
+    // passed Jpsi/Upsi
+    HM->VVar["passJpsi_B1Onia"]->push_back((bool) pair->auxdata<char>("passed_Jpsi"));
+    HM->VVar["passUpsi_B1Onia"]->push_back((bool) pair->auxdata<char>("passed_Upsi"));
+
+    HM->FillCutflow("B1Onia");
+  }
+
+  return EL::StatusCode::SUCCESS;
+}

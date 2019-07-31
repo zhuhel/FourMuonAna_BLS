@@ -1,0 +1,7 @@
+{ decls }
+namespace CP {  }
+
+[ libMuonMomentumCorrections_Reflex.so ]
+# List of selected classes
+class CP::MuonCalibrationAndSmearingTool
+header MuonMomentumCorrections/MuonCalibrationAndSmearingTool.h

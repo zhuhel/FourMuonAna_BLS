@@ -1,0 +1,370 @@
+2017-08-02  Stefano Zambito  <stefano.zambito@cern.ch>
+	* including an eloss term in new bad muon veto for high-pt selection
+
+2017-17-01  Stefano Zambito  <stefano.zambito@cern.ch>
+	* re-enabling TRT cut by default (it can be switched off by the user if necessary)
+
+2017-17-01  Stefano Zambito  <stefano.zambito@cern.ch>
+	* vetoing implementing new bad muon veto for high-pt selection
+
+2017-03-01  Stefano Zambito  <stefano.zambito@cern.ch>
+	* vetoing 3-station muons with small/large sectors overlap in high-pt selection
+	* tightening 3-station muons veto in BEE region for high-pt selection
+	* tightening barrel-endcap overlap veto for high-pt selection
+	* tagging as MuonSelectorTools-00-05-38
+
+2016-21-11  Stefano Zambito  <stefano.zambito@cern.ch>
+	* turning off TRT requirements
+	* tightening muon selection for derivations
+	* tagging as MuonSelectorTools-00-05-37
+
+2016-10-11 Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
+	* Taught the CMake configuration how to build the package in
+	  standalone mode.
+	* Added a dictionary for CP::IMuonSelectionTool.
+	* Tagging as MuonSelectorTools-00-05-36
+
+2016-08-09  Stefano Zambito  <stefano.zambito@cern.ch>
+	* moving Tools/PathResolver to the public dependencies in CMakeLists.txt 
+	* tagging as MuonSelectorTools-00-05-35
+
+2016-08-08 Edward.Moyse@cern.ch
+	* Removing apparently unnecessary includes
+	* tagging as MuonSelectorTools-00-05-34
+
+2016-07-20  Stefano Zambito  <stefano.zambito@cern.ch>
+	* fixing CMakeLists.txt for Rel. 21
+	* tagging as MuonSelectorTools-00-05-33
+
+2016-06-08  Stefano Zambito  <stefano.zambito@cern.ch>
+	* implementing ICHEP 2016 recommendations
+	* tagging as MuonSelectorTools-00-05-32
+
+2016-04-15  Max Goblirsch <goblirsc-at-cern.ch>
+	* Removed the SAF hack, added a FATAL error if the xAODMuon bug is still there
+	* Tagging as MuonSelectorTools-00-05-27
+
+2016-04-14  Massimiliano Bellomo  <massimiliano.bellomo@cern.ch>
+	* Tagging as MuonSelectorTools-00-05-26
+
+2016-04-13 Hannah Herde <hannah.herde@cern.ch>
+	* Modified BEE coordinates in accordance with MCP recommendations
+
+2016-04-13  Max Goblirsch <goblirsc-at-cern.ch>
+	* Implemented a configurable calibration path 
+
+2016-04-11  Stefano Zambito  <stefano.zambito@cern.ch>
+	* implementing 20.7 preliminary reccomendations (to be validated)
+	* tagging as MuonSelectorTools-00-05-25
+
+2016-03-18  Hannah Herde <hannah.herde@cern.ch>
+  * corrected the High Pt WP veto mask for BIS78 eta coordinates
+
+2015-11-24  Giacomo Artoni  <giacomo.artoni@cern.ch>
+	* adding veto for barrel/endcap overlap region 
+	* tagging as MuonSelectorTools-00-05-21
+
+2015-11-19  Federico Sforza  <federico.sforza@cern.ch>
+	* adding protection for "not" corrected MC muons passed to the tool
+	* tagging as MuonSelectorTools-00-05-20
+
+2015-10-30  Federico Sforza  <federico.sforza@cern.ch>
+	* new rho: (pT_ID - pT_ME)/pT_CB
+	at 1 TeV pt_CB resolution ~ pT_ME reso ~ 12-15% (with good align), at 100GeV pt_CB reso ~ 3 %
+	The rho variable widens as pT_ID reso because its resolution at high pT is worst and it grows quickly from low to high pT.
+	Looking here: ​https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/CONFNOTES/ATLAS-CONF-2014-047/
+
+	At eta~0.3 reso_ID ~3% at 100GeV ~12% at 400 -> ~ factor 10 at 1 TeV gives 30% to be compared to reso_CB
+	then we can use a factor 4 widening in the rho cut
+
+	Similar for endcap but ID situation is worst:
+	at eta~1.9 reso_ID ~6% at 100GeV ~25-28% at 400 -> ~ more than factor 10 at 1 TeV gives to be compared to reso_CB
+	then we can use a factor 8-10 widening in the rho cut. We choose a looser value of 10 to account
+	the horrible reso_ID of Eta>2	
+	* tagging as MuonSelectorTools-00-05-19
+
+
+2015-09-30  Stefano Zambito  <stefano.zambito@cern.ch>
+	* removing buggy CaloMuonIDTag==44 (fixed in Rel. 20.7)
+	* tagging as MuonSelectorTools-00-05-18
+
+2015-09-17  Stefano Zambito  <stefano.zambito@cern.ch>
+	* several improvements, updated High-pT WP, removed MuonLegacySelectionTool
+	* tagging as MuonSelectorTools-00-05-17
+
+2015-07-03 Hannah Herde <hannah.herde@cern.ch>
+  * removed the MuonLegacySelectionTool
+
+2015-06-26 Hannah Herde <hannah.herde@cern.ch>
+	* added a switch the passedHighPtCuts method to use the combined track when
+	* added a switch the passedHighPtCuts method to use the combined track when
+	the MS track is unavailable
+
+
+2015-06-24  Massimiliano Bellomo  <massimiliano.bellomo@cern.ch>
+	* Adding MuonLegacySelectionTool as a copy of MuonSelectionTool from MuonSelectorTools-00-05-07-04
+	to have a legacy version used in reconstruction not brteaking T0 frozen policy
+	* Tagging as  MuonSelectorTools-00-05-15
+	
+2015-06-23  Massimiliano Bellomo  <massimiliano.bellomo@cern.ch>
+	* Fix to use HighPt selection as working point
+	* Tagging as MuonSelectorTools-00-05-14
+
+	* Fix to MS chamber vetos
+	* Tagging as MuonSelectorTools-00-05-13
+
+	* added tuned highPT selection for early 13 TeV data  (by H. Herde and G. Artoni)
+	* removed unneeded method to make the tag cache compatible
+	* tagging as MuonSelectorTools-00-05-12
+	
+2015-06-13  Stefano Zambito  <stefano.zambito@cern.ch>
+	* added protection for SA muons in toroid-off data 
+	* tagging as MuonSelectorTools-00-05-11
+
+2015-06-11  Stefano Zambito  <stefano.zambito@cern.ch>
+	* added fix for toroid-off WP, and for toroid-on CB tracks when MS/ME tracks are missing (to be fixed in reconstruction)
+
+2015-06-09  Massimiliano Bellomo  <massimiliano.bellomo@cern.ch>
+	* added option to do proper selection on toroid off reconstruction
+
+2015-05-19  Massimiliano Bellomo  <massimiliano.bellomo@cern.ch>
+	* re-added segment tagged to Loose in |eta|<0.1, momentum balance cut replaced by qoverp significance cut
+	* added cut to use 1-station muons only in |eta|<0.1 to further reduce fakes
+	* tagging as MuonSelectorTools-00-05-10
+
+2015-05-17 Massimiliano Bellomo <massimiliano.bellomo@cern.ch>
+	* restored Loosed and Medium as before, added passedDerivationCuts method
+	* tagging as MuonSelectorTools-00-05-09
+	
+2015-05-17 Massimiliano Bellomo <massimiliano.bellomo@cern.ch>
+	* added definition for Tight, added segment tagged to loose in eta 0.1, momentum balance cut replaced by qoverp significance cut
+	
+2015-05-12 Magda Chelstowska <magdac@cern.ch>
+	* trunk is now compatible with release 20 EDM
+	* updates to the copy constructor
+	* Tagging MuonSelectorTools-00-05-08
+	
+2015-05-11 Magda Chelstowska <magdac@cern.ch>
+	* merging release 20 branch with the trunk
+	
+2015-05-06 Magda Chelstowska <magdac@cern.ch>
+	* Tagging MuonSelectorTools-00-05-07-07
+	
+2015-05-06  Massimiliano Bellomo  <massimiliano.bellomo@cern.ch>
+	* Fixing summaryValue for muons to not use primaryTrackParticle
+	* Fixing xAOD::Muon enumeration and using TrackingPrimitives namespaces	
+	
+2015-05-04 Magda Chelstowska <magdac@cern.ch>
+	* Update the muon quality requirements towards MCP pre-recommendations
+	
+2015-04-22 Magda Chelstowska <magda.anna.chelstowska@cern.ch>
+	* Fixing default values for quality (set it to VeryLoose)
+	* Tagging MuonSelectorTools-00-05-07-06
+	
+2015-04-20 Magda Chelstowska <magda.anna.chelstowska@cern.ch>
+	* Fixed SA muon ID cuts requirement
+	* Fixed SA muon quality requirement
+	
+2015-01-27 Magda Chelstowska <magda.anna.chelstowska@cern.ch>
+	* Fixed package dependencies (changes in Makefile.RootCore)
+	* Added an algorithm to recalculate muon quality (changes in requirements)
+	* Tagging MuonSelectorTools-00-05-07-03 for rel20 EDM (ROOT 5 and 6)
+	
+2015-01-16 Magda Chelstowska <magda.anna.chelstowska@cern.ch>
+	* hack for caloTag muons
+	* Tagged as MuonSelectorTools-00-05-07-01	
+	
+2015-01-08 Magda Chelstowska <magda.anna.chelstowska@cern.ch>
+	* Fixes based on the coverity report, JIRA ATLASRECTS-1397
+	* Fixed all four defects
+	* Tagged as MuonSelectorTools-00-05-07
+	
+2014-12-16  Massimiliano Bellomo  <massimiliano.bellomo@cern.ch>
+	* MuonSelectorTool: fix to access xAOD::Muon::CaloMuonIDTag as int
+	* Tagged as MuonSelectorTools-00-05-06
+
+2014-12-09 David Quarrie <David.Quarrie@cern.ch>
+	* cmt/requirements
+		Change to a dual_use library because the lcgdict pattern doesn't work with a pure component library 
+		when building using cmake since such a library can't be linked against. This does pollute the list
+		of libraries for clients (if any), but the as-needed linkopts eliminates any bloat from this.
+	* Tagged as MuonSelectorTools-00-05-05
+	
+2014-12-03 Magda Chelstowska <magda.anna.chelstowska@cern.ch>
+	* Refined the protection for caloTag muons
+	* Tagging MuonSelectorTools-00-05-04
+	
+2014-11-14 Magda Chelstowska <magda.anna.chelstowska@cern.ch>
+	* Changed tool property to primitive type
+	* Added support for PyRoot
+	* Added CaloTag requirements
+	* Added copy constructor for reflex
+	* Tagging MuonSelectorTools-00-05-03	
+	
+2014-11-11 Edward.Moyse@cern.ch
+	* Implemented 3 precision layers for high pT cuts
+	* MuonSelectorTools-00-05-02
+
+2014-10-29 Magda Chelstowska <magda.anna.chelstowska@cern.ch>
+	* Quality cuts 
+	* Tagging MuonSelectorTools-00-05-01
+	
+2014-10-27 Magda Chelstowska <magda.anna.chelstowska@cern.ch>
+	* VeryLoose quality (no tag yet)
+	
+2014-10-24 Edward.Moyse@cern.ch
+	* Added high pT cuts
+	* MuonSelectorTools-00-05-00
+
+2014-10-05 Magda Chelstowska <magda.anna.chelstowska@cern.ch>
+	* updates from Max (passedIDCuts on xAOD::TrackParticle)
+	
+2014-09-16 Niels van Eldik
+	* requirements cleanup
+	* MuonSelectorTools-00-04-01
+
+2014-09-16 Magda Chelstowska <magda.anna.chelstowska@cern.ch>
+	* Code cleanup
+
+2014-09-15 Edward.Moyse@cern.ch
+	* Code cleanup, and changing name of isPassedIDHitCuts to passedIDCuts 
+	* Tagged MuonSelectorTools-00-04-00
+
+2014-09-12 Will Buttinger <will@cern.ch>
+   * Fixed compilation for Athena analysis releases
+   * Added a basic selection alg that wraps the selection tool
+   * tagged as MuonSelectorTools-00-03-05
+
+2014-09-03 Magda Chelstowska <magda.anna.chelstowska@cern.ch>
+	* Fixing ID requirements
+	
+2014-09-02 Magda Chelstowska <magda.anna.chelstowska@cern.ch>
+	* Implemented new functions to select good muons
+	
+2014-08-28 Peter Kluit
+        * Fixing bugs in Medium definition 
+	* fixed requirements
+	* Tagged MuonSelectorTools-00-03-04
+
+2014-07-28 Edward.Moyse@cern.ch
+        * Fixing bug in TRT Id hit cut
+        * Tagged MuonSelectorTools-00-03-03
+
+2014-06-20 Niels van Eldik
+        * Fixing operator-ordering bug in ID hits selection
+        * Adding dual-use tool as a component for Athena use
+        * Tagged MuonSelectorTools-00-03-02
+
+2014-06-19 Niels van Eldik
+        * Fixing operator-ordering bug in ID hits selection
+        * Adding dual-use tool as a component for Athena use
+        * Tagged MuonSelectorTools-00-03-01
+
+2014-01-17  Edward.Moysec@cern.ch
+        * Added setQuality and setPassesIDCuts to MuonSelectionTool
+        * Tagged MuonSelectorTools-00-03-00
+
+2014-01-17  Edward.Moyse@cern.ch
+        * Added new MuonSelectionTool
+        * Tagged MuonSelectorTools-00-02-00
+
+2014-01-17  Niels van Eldik
+
+	* update package for 19
+        * Tagged MuonSelectorTools-00-01-14
+
+2013-04-22  Karsten Koeneke  <karsten.koeneke@cern.ch>
+
+	* cmt/requirements: Move IUserDataCalcTool interface to PATCore
+        * Tagged MuonSelectorTools-00-01-12
+
+2013-02-26  Grigori Rybkine <Grigori.Rybkine@cern.ch>
+
+	* cmt/requirements: Do not use *.cxx as sources for component library (so
+	as not to compile them twice)
+        * Tagged MuonSelectorTools-00-01-11
+
+2013-01-29 Magda Chelstowska <magda.anna.chelstowska@cern.ch>
+	* cleaned up the configs
+	* made a new instance of the 2011 tool
+	* Tagged MuonSelectorTools-00-01-10
+
+2013-01-24  Magda Chelstowska <magda.anna.chelstowska@cern.ch>
+	* 2011 ID requirements, compatible with PATCore
+	* trunk version for now
+
+2012-12-11  Karsten Koeneke  <karsten.koeneke@cern.ch>
+
+	* src/AthMuonSelector.cxx: Fix athena-side logic. Better debug reporting.
+	* Tagged MuonSelectorTools-00-01-09
+
+2012-12-07  Karsten Koeneke  <karsten.koeneke@cern.ch>
+
+	* src/AthMuonSelector.cxx: Fix internal bookkeeping (was only visible when externally quering the returned TAccept)
+	* src/AthStandAloneMuonSelector.cxx: Fix internal bookkeeping (was only visible when externally quering the returned TAccept)
+	* Tagged MuonSelectorTools-00-01-08
+
+2012-11-26  Karsten Koeneke  <karsten.koeneke@cern.ch>
+
+	* src/AthMuonSelector.cxx: pass muon if it is a isSiliconAssociatedForwardMuon.
+	* Tagged MuonSelectorTools-00-01-07
+
+2012-08-10  Karsten Koeneke  <karsten.koeneke@cern.ch>
+
+	* Switch to use PATCore
+	* Tagged MuonSelectorTools-00-01-06
+
+2012-07-13  Karsten Koeneke  <karsten.koeneke@cern.ch>
+
+	* Remove the ARA indirection
+	* Tagged MuonSelectorTools-00-01-04
+
+2012-07-06  Karsten Koeneke  <karsten.koeneke@cern.ch>
+
+	* Add new method to the selectors to match the change in base classes.
+	* Tagged MuonSelectorTools-00-01-03
+
+2012-06-05  Magda Chelstowska <magda.anna.chelstowska@cern.ch>
+
+	* Fix eta range
+	* Tagged MuonSelectorTools-00-01-02
+
+
+2012-03-26  Magda Chelstowska <magda.anna.chelstowska@cern.ch>
+
+	* Add 2012 ID track recommendations (fix)
+	* Tagged MuonSelectorTools-00-01-01
+
+2012-03-26  Magda Chelstowska <magda.anna.chelstowska@cern.ch>
+
+	* Add 2012 ID track recommendations
+	* Tagged MuonSelectorTools-00-01-00
+
+2012-03-26  Karsten Koeneke  <karsten.koeneke@cern.ch>
+
+	* Add selection for calo muons and stand-alone muons
+	* Tagged MuonSelectorTools-00-00-07
+
+2012-02-16  Karsten Koeneke  <karsten.koeneke@cern.ch>
+
+	* MuonSelectorTools/AthMuonSelector.h: Switch to new interface
+	* Tagged MuonSelectorTools-00-00-06
+
+2011-11-20  Karsten Koeneke  <kkoeneke@KarstenKoenekeMacBookPro.local>
+
+	* Root/TMuonSelector.cxx (TMuonSelector): Fix coverity warning 52896
+	* Tagged MuonSelectorTools-00-00-05
+
+2011-09-24  Karsten Koeneke  <karsten.koeneke@cern.ch>
+
+	* src/ARAMuonSelector.cxx: Implement the EDM->basic types translation.
+	* Tagged MuonSelectorTools-00-00-04
+
+2011-09-18 Magda Anna Chelstowska <magda.anna.chelstowska@cern.ch>
+  * a working version for StacoCB
+  * Tagged MuonSelectorTools-00-00-03
+
+
+2011-09-15 Rikard Sandstr?m <rikard.sandstrom@cern.ch>
+  * Initial version
+  * Tagged MuonSelectorTools-00-00-01

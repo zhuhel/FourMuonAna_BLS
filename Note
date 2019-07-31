@@ -1,0 +1,46 @@
+## Oct. 17, 2016
+cp FourMuonAnalysis/ ../Code_svn/FourMuonAnalysis_Oct17 -rp
+baseline code
+
+#RootCoreBin/include/xAODMuon/versions/Muon_v1.h 
+
+
+enum MuonType {
+      Combined, MuonStandAlone, SegmentTagged, CaloTagged, SiliconAssociatedForwardMuon
+    }
+
+enum Author {
+      unknown=0,
+      MuidCo,
+      STACO,
+      MuTag,
+      MuTagIMO,
+      MuidSA,
+      MuGirl,
+      MuGirlLowBeta,
+      CaloTag,
+      CaloLikelihood,
+      ExtrapolateMuonToIP,
+      NumberOfMuonAuthors // increase this guy when adding
+    };
+
+3Loose+CB, v22
+
+## Oct. 19, 2016
+cp FourMuonAnalysis/ ../Code_svn/FourMuonAnalysis_Oct18 -rp
+
+no muon IP cuts
+
+## Oct. 31, 2016
+Added ID hits, and >=3CB, <=1 ST
+
+## Nov. 5, 2016
+v35, updated D11
+
+## Nov. 8, 2016
+v36, updated D9
+
+v37, turn on TRT cut
+
+!!! remember to update GRL, doxy
+LATEST_RUN_GRL = 311481;

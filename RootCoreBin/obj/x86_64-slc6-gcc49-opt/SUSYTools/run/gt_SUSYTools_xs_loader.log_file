@@ -1,0 +1,15 @@
+Note: Google Test filter = -SLOW_*.*:*.SLOW_*:MANUAL_*.*:*.MANUAL_*
+[==========] Running 1 test from 1 test case.
+[----------] Global test environment set-up.
+[----------] 1 test from XSECTIONTEST
+[ RUN      ] XSECTIONTEST.VALFILES
+Warning in <TInterpreter::ReadRootmapFile>: class  TUnfold found in libUnfold.so  is already in libHist.so 
+Warning in <TInterpreter::ReadRootmapFile>: class  TUnfoldBinning found in libUnfold.so  is already in libHist.so 
+Warning in <TInterpreter::ReadRootmapFile>: class  TUnfoldDensity found in libUnfold.so  is already in libHist.so 
+Warning in <TInterpreter::ReadRootmapFile>: class  TUnfoldSys found in libUnfold.so  is already in libHist.so 
+[       OK ] XSECTIONTEST.VALFILES (1537 ms)
+[----------] 1 test from XSECTIONTEST (1537 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test case ran. (1538 ms total)
+[  PASSED  ] 1 test.

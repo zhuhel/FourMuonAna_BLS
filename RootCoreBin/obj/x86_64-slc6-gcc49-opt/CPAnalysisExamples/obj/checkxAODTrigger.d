@@ -1,0 +1,1 @@
+/atlas/data18a/helingzh/workplace/summer2016/Run2/FourMuonAna/RootCoreBin/obj/x86_64-slc6-gcc49-opt/CPAnalysisExamples/obj/checkxAODTrigger.o /atlas/data18a/helingzh/workplace/summer2016/Run2/FourMuonAna/RootCoreBin/obj/x86_64-slc6-gcc49-opt/CPAnalysisExamples/obj/checkxAODTrigger.d : /cvmfs/atlas.cern.ch/repo/sw/ASG/AnalysisBase/2.5.0/CPAnalysisExamples/util/checkxAODTrigger.cxx

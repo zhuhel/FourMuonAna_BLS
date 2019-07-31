@@ -1,0 +1,5 @@
+/pnfs/aglt2.org/atlaslocalgroupdisk/rucio/data17_13TeV/b0/61/DAOD_BPHY4.12386073._000001.pool.root.1
+/pnfs/aglt2.org/atlaslocalgroupdisk/rucio/data17_13TeV/21/95/DAOD_BPHY4.12386073._000002.pool.root.1
+/pnfs/aglt2.org/atlaslocalgroupdisk/rucio/data17_13TeV/9d/ed/DAOD_BPHY4.12386073._000003.pool.root.1
+/pnfs/aglt2.org/atlaslocalgroupdisk/rucio/data17_13TeV/9d/16/DAOD_BPHY4.12386073._000004.pool.root.1
+/pnfs/aglt2.org/atlaslocalgroupdisk/rucio/data17_13TeV/78/d7/DAOD_BPHY4.12386073._000005.pool.root.1
